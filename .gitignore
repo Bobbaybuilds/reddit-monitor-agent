@@ -10,7 +10,7 @@ ENV/
 .venv
 
 # Data files (will be generated)
-data/
+/data/
 
 # IDE
 .vscode/

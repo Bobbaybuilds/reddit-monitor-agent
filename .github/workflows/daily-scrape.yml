@@ -34,12 +34,12 @@ jobs:
       
       - name: Copy report to dashboard
         run: |
-          mkdir -p dashboard/data
-          cp data/report.json dashboard/data/report.json
+          mkdir -p docs/data
+          cp data/report.json docs/data/report.json
       
       - name: Commit and push if changes
         run: |
           git config --global user.name 'Reddit Monitor Bot'
           git config --global user.email 'bot@github-actions'
-          git add dashboard/data/report.json
+          git add docs/data/report.json
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update daily report - $(date +'%Y-%m-%d %H:%M')" && git push)

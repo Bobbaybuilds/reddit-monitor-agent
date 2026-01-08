@@ -12,7 +12,6 @@ from datetime import datetime, timedelta
 import requests
 from bs4 import BeautifulSoup
 import re
-import google.generativeai as genai
 
 # Configuration
 SUBREDDITS = [
@@ -214,65 +213,33 @@ class PostScorer:
         return breakdown
 
 class ResponseDrafter:
-    def __init__(self, api_key):
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
-    
-    def draft_response(self, post, is_dm=False):
-        """Draft a response using Google Gemini"""
+    def __init__(self, api_key=None):
+        # No API needed for templates
+        self.templates = {
+            'public_comments': [
+                "I completely understand what you're going through. I struggled with impulse buying too, which is why I built Spend Slow - it helps you add items to a wishlist and set cooldown periods (1, 3, or 7 days) before buying. The waiting period really helps break the impulse cycle. There's a free option if you want to try it. Happy to share more info if helpful!",
 
-        post_text = f"Title: {post['title']}\n\nContent: {post['selftext']}"
+                "This resonates with me so much. I've found that creating a barrier between wanting something and buying it makes a huge difference. That's the idea behind Spend Slow - you add items and choose how long to wait (1-7 days). Often by the time the cooldown ends, you realize you don't actually need it. Free version available. Let me know if you'd like to know more!",
+
+                "You're not alone in this struggle. I built a tool called Spend Slow specifically for this - it lets you pause before purchases by setting cooldown periods. You can choose 1, 3, or 7 days to think it over. It's been really effective for breaking the impulse buying habit. There's a free tier. Feel free to reach out if you want more details!",
+            ],
+            'dms': [
+                "Hey, I saw your post and really related to your struggle. I went through something similar with impulse buying, which led me to create Spend Slow.\n\nIt's a simple tool that helps you pause before purchasing - you add items you want and set a cooldown period (1, 3, or 7 days). During that time, you can think it over, and often the urge passes.\n\nThere's a free version you can try. No pressure at all, just wanted to share something that helped me. Wishing you the best on your journey!",
+
+                "Hi! I came across your post and wanted to reach out. I've been where you are with the shopping struggles, and I know how hard it can be.\n\nI actually built a tool called Spend Slow to help with this exact problem. The concept is simple: before buying anything, you add it to the app and set a waiting period (1-7 days). That pause is often enough to break the impulse cycle.\n\nThere's a free option available. Just thought I'd share in case it might help. You've got this!",
+
+                "Hey there, I saw your post and felt compelled to reach out. Your struggle really resonated with me because I've been through something similar.\n\nI ended up creating Spend Slow as a way to manage impulse purchases. It works by letting you add items and then choosing a cooldown period before you can buy them. Sometimes just knowing you have to wait 3 or 7 days is enough to change your mind.\n\nThere's a free tier if you want to give it a try. Either way, I'm rooting for you!",
+            ]
+        }
+
+    def draft_response(self, post, is_dm=False):
+        """Draft a response using pre-written templates"""
+        import random
 
         if is_dm:
-            prompt = f"""You are a helpful, empathetic person who genuinely wants to help others struggling with shopping addiction. You are NOT a salesperson.
-
-You are reaching out to a Reddit user who is struggling with impulse buying or shopping addiction.
-
-THE POST:
-{post_text}
-
-YOUR TASK:
-Write a warm, empathetic private message (DM) to this person.
-
-GUIDELINES:
-- Be genuinely empathetic and understanding
-- Acknowledge their specific struggle mentioned in their post
-- Naturally mention Spend Slow as a tool that might help them
-- Explain briefly: Spend Slow helps people add items they want to buy and set cooldown periods (1, 3, or 7 days) before purchasing
-- Keep it conversational and authentic (NOT salesy)
-- Mention there's a free option available
-- Max 150 words
-
-Write the DM:"""
+            return random.choice(self.templates['dms'])
         else:
-            prompt = f"""You are a helpful, empathetic person who genuinely wants to help others struggling with shopping addiction. You are NOT a salesperson.
-
-You are commenting on a Reddit post from someone struggling with impulse buying or shopping addiction.
-
-THE POST:
-{post_text}
-
-YOUR TASK:
-Write an empathetic, helpful public comment.
-
-GUIDELINES:
-- Be supportive and understanding
-- Reference their specific situation
-- Share that you've built a tool called Spend Slow that helps with this exact problem
-- Briefly explain: lets you add items and set cooldown periods (1, 3, or 7 days) to avoid impulse purchases
-- Mention it has a free option
-- Keep it natural and conversational (NOT an advertisement)
-- Max 100 words
-- End with offering to share more info if they're interested
-
-Write the comment:"""
-
-        try:
-            response = self.model.generate_content(prompt)
-            return response.text.strip()
-        except Exception as e:
-            print(f"Error drafting response: {e}")
-            return "[Error generating response]"
+            return random.choice(self.templates['public_comments'])
 
 def main():
     print("🚀 Starting Reddit Monitor Agent...")
@@ -282,13 +249,8 @@ def main():
     scraper = RedditScraper()
     scorer = PostScorer()
     
-    # Get Gemini API key (try GEMINI_API_KEY first, fallback to OPENAI_API_KEY for compatibility)
-    api_key = os.environ.get('GEMINI_API_KEY') or os.environ.get('OPENAI_API_KEY')
-    if not api_key:
-        print("❌ Error: GEMINI_API_KEY or OPENAI_API_KEY not found in environment variables")
-        return
-
-    drafter = ResponseDrafter(api_key)
+    # Initialize response drafter with templates (no API key needed)
+    drafter = ResponseDrafter()
     
     # Scrape all subreddits
     all_posts = []
@@ -335,9 +297,9 @@ def main():
         return
 
     print(f"✅ Top 20 posts selected (scores: {top_20[0]['score_value']}-{top_20[-1]['score_value']})")
-    
+
     # Draft responses for top 20
-    print("\n✍️  Drafting responses with GPT-4...")
+    print("\n✍️  Drafting responses using templates...")
     results = []
     
     for i, post in enumerate(top_20, 1):
@@ -368,8 +330,6 @@ def main():
                 'dm': dm_response
             }
         })
-        
-        time.sleep(1)  # Rate limit OpenAI calls
     
     print("\n✅ All responses drafted!")
     

@@ -276,11 +276,11 @@ def main():
         post['score_breakdown'] = breakdown
         scored_posts.append(post)
     
-    # Sort by score and get top 20
+    # Sort by score and get all posts
     scored_posts.sort(key=lambda x: x['score_value'], reverse=True)
-    top_20 = scored_posts[:20]
+    top_opportunities = scored_posts
 
-    if len(top_20) == 0:
+    if len(top_opportunities) == 0:
         print("⚠️  No posts found. This might be due to Reddit blocking automated requests.")
         print("Consider using Reddit's official API or running this locally instead of in GitHub Actions.")
         # Create empty report
@@ -296,14 +296,14 @@ def main():
             json.dump(output, f, indent=2)
         return
 
-    print(f"✅ Top 20 posts selected (scores: {top_20[0]['score_value']}-{top_20[-1]['score_value']})")
+    print(f"✅ All {len(top_opportunities)} posts selected (scores: {top_opportunities[0]['score_value']}-{top_opportunities[-1]['score_value']})")
 
-    # Draft responses for top 20
-    print("\n✍️  Drafting responses using templates...")
+    # Draft responses for all posts
+    print(f"\n✍️  Drafting responses using templates for {len(top_opportunities)} posts...")
     results = []
     
-    for i, post in enumerate(top_20, 1):
-        print(f"   Drafting {i}/20...", end='\r')
+    for i, post in enumerate(top_opportunities, 1):
+        print(f"   Drafting {i}/{len(top_opportunities)}...", end='\r')
         
         # Draft both public comment and DM
         public_response = drafter.draft_response(post, is_dm=False)
@@ -355,12 +355,12 @@ def main():
     print("📈 SUMMARY")
     print("="*60)
     print(f"Total posts scanned: {len(all_posts)}")
-    print(f"Top 20 selected")
-    print(f"Score range: {top_20[0]['score_value']} - {top_20[-1]['score_value']}")
+    print(f"Total posts selected: {len(top_opportunities)}")
+    print(f"Score range: {top_opportunities[0]['score_value']} - {top_opportunities[-1]['score_value']}")
     print(f"\nHighest scoring post:")
-    print(f"  Score: {top_20[0]['score_value']}/100")
-    print(f"  Subreddit: r/{top_20[0]['subreddit']}")
-    print(f"  Title: {top_20[0]['title'][:60]}...")
+    print(f"  Score: {top_opportunities[0]['score_value']}/100")
+    print(f"  Subreddit: r/{top_opportunities[0]['subreddit']}")
+    print(f"  Title: {top_opportunities[0]['title'][:60]}...")
     print("="*60)
 
 if __name__ == '__main__':

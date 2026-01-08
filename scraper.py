@@ -321,7 +321,23 @@ def main():
     # Sort by score and get top 20
     scored_posts.sort(key=lambda x: x['score_value'], reverse=True)
     top_20 = scored_posts[:20]
-    
+
+    if len(top_20) == 0:
+        print("⚠️  No posts found. This might be due to Reddit blocking automated requests.")
+        print("Consider using Reddit's official API or running this locally instead of in GitHub Actions.")
+        # Create empty report
+        output = {
+            'generated_at': datetime.now().isoformat(),
+            'total_posts_scanned': 0,
+            'top_opportunities': []
+        }
+        output_dir = '/home/claude/reddit-monitor-agent/data'
+        os.makedirs(output_dir, exist_ok=True)
+        output_file = f'{output_dir}/report.json'
+        with open(output_file, 'w') as f:
+            json.dump(output, f, indent=2)
+        return
+
     print(f"✅ Top 20 posts selected (scores: {top_20[0]['score_value']}-{top_20[-1]['score_value']})")
     
     # Draft responses for top 20

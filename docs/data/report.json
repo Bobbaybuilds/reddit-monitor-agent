@@ -1,0 +1,82 @@
+{
+  "generated_at": "2026-01-08T17:30:00.000000",
+  "total_posts_scanned": 347,
+  "top_opportunities": [
+    {
+      "rank": 1,
+      "score": 85,
+      "post_id": "sample123",
+      "title": "I spent $800 this month on clothes I don't need. Looking for an app to help.",
+      "content": "I've been struggling with impulse buying for years. Every time I see something on sale, I convince myself I need it. This month alone I've spent $800 on clothes that are still sitting with tags on. I'm drowning in debt and I hate myself for it. Does anyone know of any apps that can help me stop this?",
+      "author": "struggling_buyer",
+      "subreddit": "shoppingaddiction",
+      "url": "https://reddit.com/r/shoppingaddiction/comments/sample123",
+      "created": "2026-01-08 10:15",
+      "age_hours": 7,
+      "engagement": {
+        "upvotes": 45,
+        "comments": 23
+      },
+      "score_breakdown": [
+        "⚠️ HIGH SPENDER: Mentions $800",
+        "🎯 Asking for app recommendations",
+        "💬 Actively seeking help",
+        "🕐 Posted 7 hours ago"
+      ],
+      "responses": {
+        "public_comment": "I really understand what you're going through - that feeling of regret after impulse purchases is so tough. I actually built a tool called Spend Slow specifically for this. It lets you add items you want to buy and set a cooldown period (1, 3, or 7 days) before you can purchase them. It's helped me avoid so many impulse buys. There's a free option if you want to try it out. Happy to share more details if you're interested!",
+        "dm": "Hey, I saw your post about struggling with impulse buying and spending $800 this month. I really feel for you - that cycle of buying, guilt, and regret is so draining.\n\nI wanted to reach out because I actually built an app called Spend Slow that's designed exactly for this problem. When you see something you want to buy, you add it to the app and set a cooldown period (1, 3, or 7 days). You can't buy it until that time passes. It creates just enough friction to break the impulse.\n\nThere's a free version available, so no risk to try it. Given that you're spending hundreds per month, even a small subscription ($20/year for premium) would pay for itself many times over if it helps you avoid just a few impulse purchases.\n\nI'm not trying to sell you - just genuinely want to help because I know how hard this struggle is. Let me know if you'd like to hear more about it!"
+      }
+    },
+    {
+      "rank": 2,
+      "score": 78,
+      "post_id": "sample456",
+      "title": "Starting my no-buy challenge today. Any tips?",
+      "content": "I've realized I have a serious shopping problem. I'm starting a no-buy year today and I'm terrified I'll fail. I've tried before and always give in within a week. Does anyone have strategies that actually work?",
+      "author": "determined123",
+      "subreddit": "nobuy",
+      "url": "https://reddit.com/r/nobuy/comments/sample456",
+      "created": "2026-01-08 14:00",
+      "age_hours": 3,
+      "engagement": {
+        "upvotes": 67,
+        "comments": 41
+      },
+      "score_breakdown": [
+        "💬 Actively seeking help",
+        "🎯 Starting a challenge (perfect timing)",
+        "🕐 Posted 3 hours ago"
+      ],
+      "responses": {
+        "public_comment": "Starting a no-buy year is a huge commitment - good for you! One thing that really helped me was having a tool to add items to instead of buying them immediately. I use Spend Slow - you add items and set cooldown periods. It scratches the 'shopping' itch without actually spending. There's a free version. Might be worth trying alongside your no-buy challenge!",
+        "dm": "Hey! I saw you're starting a no-buy year today - that's really brave, especially after trying before.\n\nI wanted to share something that might help: an app called Spend Slow. Instead of buying things immediately, you add them to the app with a cooldown period (1-7 days). It gives you the satisfaction of 'shopping' without spending money, and by the time the cooldown ends, you usually realize you don't actually want it.\n\nI know from personal experience how hard those first few weeks are. Having a tool to help create friction between wanting and buying can be a game-changer. There's a free version to try out.\n\nWishing you the best with your no-buy year!"
+      }
+    },
+    {
+      "rank": 3,
+      "score": 72,
+      "post_id": "sample789",
+      "title": "Spent $500 again this week. I can't stop.",
+      "content": "I don't know what's wrong with me. Every time I get paid, the money is gone within days. This week it was $500 on random stuff I don't even remember buying. I'm so ashamed.",
+      "author": "paycheck_gone",
+      "subreddit": "shoppingaddiction",
+      "url": "https://reddit.com/r/shoppingaddiction/comments/sample789",
+      "created": "2026-01-07 20:00",
+      "age_hours": 21,
+      "engagement": {
+        "upvotes": 89,
+        "comments": 56
+      },
+      "score_breakdown": [
+        "⚠️ HIGH SPENDER: Mentions $500",
+        "💬 Expressing distress",
+        "🕐 Posted 21 hours ago"
+      ],
+      "responses": {
+        "public_comment": "Please don't be ashamed - shopping addiction is real and it's not your fault. What you're describing sounds really difficult. One thing that helped me was using Spend Slow - it forces a waiting period before purchases. Even just a 1-day cooldown has saved me hundreds. There's a free version to try. Take care of yourself.",
+        "dm": "I read your post about spending $500 this week and I wanted to reach out. Please know that what you're experiencing is a real struggle that many people face - you're not broken.\n\nI built a tool called Spend Slow specifically for this kind of impulsive spending. It creates a mandatory waiting period (you choose 1, 3, or 7 days) before you can buy something. It's helped me catch myself so many times when I was about to blow money on things I didn't need.\n\nGiven that you're spending $500/week, that's $2,000+ per month. Even our premium version is only $20/year - it would pay for itself if it helps you avoid just one impulse buy.\n\nI'm not trying to sell you anything - there's a free version you can try with no commitment. I just genuinely want to help because I know this struggle. Let me know if you'd like to hear more."
+      }
+    }
+  ]
+}

@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 import requests
 from bs4 import BeautifulSoup
 import re
-from openai import OpenAI
+import google.generativeai as genai
 
 # Configuration
 SUBREDDITS = [
@@ -215,21 +215,24 @@ class PostScorer:
 
 class ResponseDrafter:
     def __init__(self, api_key):
-        self.client = OpenAI(api_key=api_key)
+        genai.configure(api_key=api_key)
+        self.model = genai.GenerativeModel('gemini-1.5-flash')
     
     def draft_response(self, post, is_dm=False):
-        """Draft a response using GPT-4"""
-        
+        """Draft a response using Google Gemini"""
+
         post_text = f"Title: {post['title']}\n\nContent: {post['selftext']}"
-        
+
         if is_dm:
-            prompt = f"""You are reaching out to a Reddit user who is struggling with impulse buying or shopping addiction. 
+            prompt = f"""You are a helpful, empathetic person who genuinely wants to help others struggling with shopping addiction. You are NOT a salesperson.
+
+You are reaching out to a Reddit user who is struggling with impulse buying or shopping addiction.
 
 THE POST:
 {post_text}
 
 YOUR TASK:
-Write a warm, empathetic private message (DM) to this person. 
+Write a warm, empathetic private message (DM) to this person.
 
 GUIDELINES:
 - Be genuinely empathetic and understanding
@@ -242,7 +245,9 @@ GUIDELINES:
 
 Write the DM:"""
         else:
-            prompt = f"""You are commenting on a Reddit post from someone struggling with impulse buying or shopping addiction.
+            prompt = f"""You are a helpful, empathetic person who genuinely wants to help others struggling with shopping addiction. You are NOT a salesperson.
+
+You are commenting on a Reddit post from someone struggling with impulse buying or shopping addiction.
 
 THE POST:
 {post_text}
@@ -261,19 +266,10 @@ GUIDELINES:
 - End with offering to share more info if they're interested
 
 Write the comment:"""
-        
+
         try:
-            response = self.client.chat.completions.create(
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": "You are a helpful, empathetic person who genuinely wants to help others struggling with shopping addiction. You are NOT a salesperson."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.7,
-                max_tokens=300
-            )
-            
-            return response.choices[0].message.content.strip()
+            response = self.model.generate_content(prompt)
+            return response.text.strip()
         except Exception as e:
             print(f"Error drafting response: {e}")
             return "[Error generating response]"
@@ -286,13 +282,13 @@ def main():
     scraper = RedditScraper()
     scorer = PostScorer()
     
-    # Get OpenAI API key
-    openai_api_key = os.environ.get('OPENAI_API_KEY')
-    if not openai_api_key:
-        print("❌ Error: OPENAI_API_KEY not found in environment variables")
+    # Get Gemini API key (try GEMINI_API_KEY first, fallback to OPENAI_API_KEY for compatibility)
+    api_key = os.environ.get('GEMINI_API_KEY') or os.environ.get('OPENAI_API_KEY')
+    if not api_key:
+        print("❌ Error: GEMINI_API_KEY or OPENAI_API_KEY not found in environment variables")
         return
-    
-    drafter = ResponseDrafter(openai_api_key)
+
+    drafter = ResponseDrafter(api_key)
     
     # Scrape all subreddits
     all_posts = []
@@ -331,7 +327,7 @@ def main():
             'total_posts_scanned': 0,
             'top_opportunities': []
         }
-        output_dir = '/home/claude/reddit-monitor-agent/data'
+        output_dir = 'data'
         os.makedirs(output_dir, exist_ok=True)
         output_file = f'{output_dir}/report.json'
         with open(output_file, 'w') as f:
@@ -383,8 +379,8 @@ def main():
         'total_posts_scanned': len(all_posts),
         'top_opportunities': results
     }
-    
-    output_dir = '/home/claude/reddit-monitor-agent/data'
+
+    output_dir = 'data'
     os.makedirs(output_dir, exist_ok=True)
     output_file = f'{output_dir}/report.json'
     

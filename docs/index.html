@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,85 +14,85 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
         }
-        
+
         .header {
             background: white;
             border-radius: 16px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         }
-        
+
         .header h1 {
             font-size: 32px;
             color: #1a202c;
             margin-bottom: 8px;
         }
-        
+
         .header .subtitle {
             color: #718096;
             font-size: 16px;
         }
-        
+
         .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
-        
+
         .stat-card {
             background: white;
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
-        
+
         .stat-card .label {
             color: #718096;
             font-size: 14px;
             margin-bottom: 8px;
         }
-        
+
         .stat-card .value {
             font-size: 28px;
             font-weight: 600;
             color: #1a202c;
         }
-        
+
         .post-card {
             background: white;
             border-radius: 16px;
             padding: 24px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
         .post-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
         }
-        
+
         .post-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 16px;
         }
-        
+
         .rank-badge {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -100,7 +101,7 @@
             font-weight: 600;
             font-size: 14px;
         }
-        
+
         .score-badge {
             background: #48bb78;
             color: white;
@@ -109,7 +110,7 @@
             font-weight: 600;
             font-size: 18px;
         }
-        
+
         .post-title {
             font-size: 20px;
             font-weight: 600;
@@ -117,7 +118,7 @@
             margin-bottom: 12px;
             line-height: 1.4;
         }
-        
+
         .post-meta {
             display: flex;
             gap: 16px;
@@ -126,13 +127,13 @@
             font-size: 14px;
             color: #718096;
         }
-        
+
         .post-meta span {
             display: flex;
             align-items: center;
             gap: 4px;
         }
-        
+
         .subreddit-tag {
             background: #edf2f7;
             color: #4a5568;
@@ -140,7 +141,7 @@
             border-radius: 12px;
             font-weight: 500;
         }
-        
+
         .breakdown {
             background: #f7fafc;
             border-left: 4px solid #667eea;
@@ -148,13 +149,13 @@
             margin: 16px 0;
             border-radius: 8px;
         }
-        
+
         .breakdown-item {
             margin: 6px 0;
             font-size: 14px;
             color: #4a5568;
         }
-        
+
         .content-preview {
             color: #4a5568;
             line-height: 1.6;
@@ -165,28 +166,28 @@
             max-height: 150px;
             overflow-y: auto;
         }
-        
+
         .responses {
             margin-top: 20px;
         }
-        
+
         .response-section {
             margin-bottom: 20px;
         }
-        
+
         .response-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
         }
-        
+
         .response-label {
             font-weight: 600;
             color: #1a202c;
             font-size: 16px;
         }
-        
+
         .response-text {
             background: #edf2f7;
             padding: 16px;
@@ -196,7 +197,7 @@
             font-size: 14px;
             white-space: pre-wrap;
         }
-        
+
         .button {
             background: #667eea;
             color: white;
@@ -208,26 +209,26 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-        
+
         .button:hover {
             background: #5a67d8;
         }
-        
+
         .button-secondary {
             background: #48bb78;
         }
-        
+
         .button-secondary:hover {
             background: #38a169;
         }
-        
+
         .actions {
             display: flex;
             gap: 12px;
             margin-top: 20px;
             flex-wrap: wrap;
         }
-        
+
         .expand-btn {
             background: none;
             border: none;
@@ -238,14 +239,14 @@
             padding: 8px;
             text-decoration: underline;
         }
-        
+
         .loading {
             text-align: center;
             padding: 60px 20px;
             color: white;
             font-size: 18px;
         }
-        
+
         .error {
             background: #fed7d7;
             color: #c53030;
@@ -253,19 +254,20 @@
             border-radius: 12px;
             margin-bottom: 20px;
         }
-        
+
         @media (max-width: 768px) {
             .post-header {
                 flex-direction: column;
                 gap: 12px;
             }
-            
+
             .stats {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
+
 <body>
     <div id="root"></div>
 
@@ -349,8 +351,8 @@
                             <div className="value">{data.total_posts_scanned}</div>
                         </div>
                         <div className="stat-card">
-                            <div className="label">Top Opportunities</div>
-                            <div className="value">20</div>
+                            <div className="label">Total Opportunities</div>
+                            <div className="value">{data.top_opportunities.length}</div>
                         </div>
                         <div className="stat-card">
                             <div className="label">Highest Score</div>
@@ -390,7 +392,7 @@
                             {expandedPosts[post.post_id] && (
                                 <>
                                     <div className="content-preview">
-                                        <strong>Original Post:</strong><br/>
+                                        <strong>Original Post:</strong><br />
                                         {post.content || "No additional content"}
                                     </div>
 
@@ -398,7 +400,7 @@
                                         <div className="response-section">
                                             <div className="response-header">
                                                 <span className="response-label">📝 Public Comment</span>
-                                                <button 
+                                                <button
                                                     className="button button-secondary"
                                                     onClick={() => copyToClipboard(post.responses.public_comment, `comment-${post.post_id}`)}
                                                 >
@@ -413,7 +415,7 @@
                                         <div className="response-section">
                                             <div className="response-header">
                                                 <span className="response-label">💌 Direct Message</span>
-                                                <button 
+                                                <button
                                                     className="button button-secondary"
                                                     onClick={() => copyToClipboard(post.responses.dm, `dm-${post.post_id}`)}
                                                 >
@@ -429,15 +431,15 @@
                             )}
 
                             <div className="actions">
-                                <button 
+                                <button
                                     className="expand-btn"
                                     onClick={() => toggleExpand(post.post_id)}
                                 >
                                     {expandedPosts[post.post_id] ? '▲ Hide Details' : '▼ View Details & Responses'}
                                 </button>
-                                <a 
-                                    href={post.url} 
-                                    target="_blank" 
+                                <a
+                                    href={post.url}
+                                    target="_blank"
                                     rel="noopener noreferrer"
                                     className="button"
                                 >
@@ -453,4 +455,5 @@
         ReactDOM.render(<Dashboard />, document.getElementById('root'));
     </script>
 </body>
+
 </html>

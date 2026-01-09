@@ -264,7 +264,81 @@
             .stats {
                 grid-template-columns: 1fr;
             }
+            
+            .status-select {
+                width: 100%;
+                margin: 0;
+            }
         }
+
+        /* Status Tracking Styles */
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .filter-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4a5568;
+            transition: all 0.2s;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-1px);
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .filter-btn.active {
+            background: #4a5568;
+            color: white;
+        }
+
+        .status-select {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #f7fafc;
+            color: #4a5568;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 0 12px;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .status-select:hover {
+            border-color: #cbd5e0;
+        }
+
+        /* Status Indicators on Card */
+        .post-card {
+            border-left: 5px solid transparent;
+        }
+        .post-card[data-status="Backlog"] { border-left-color: #cbd5e0; }
+        .post-card[data-status="Replied in Public"] { border-left-color: #4299e1; }
+        .post-card[data-status="DM'd"] { border-left-color: #805ad5; }
+        .post-card[data-status="They responded"] { border-left-color: #ecc94b; }
+        .post-card[data-status="Failure"] { border-left-color: #f56565; }
+        .post-card[data-status="Success"] { border-left-color: #48bb78; }
     </style>
 </head>
 
@@ -274,16 +348,45 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
+        const STATUS_OPTIONS = [
+            "Backlog",
+            "Replied in Public",
+            "DM'd",
+            "They responded",
+            "Failure",
+            "Success"
+        ];
+
         function Dashboard() {
             const [data, setData] = useState(null);
             const [loading, setLoading] = useState(true);
             const [error, setError] = useState(null);
             const [expandedPosts, setExpandedPosts] = useState({});
             const [copiedText, setCopiedText] = useState('');
+            const [postStatuses, setPostStatuses] = useState({});
+            const [filterStatus, setFilterStatus] = useState('All');
 
             useEffect(() => {
+                // Load saved statuses
+                const saved = localStorage.getItem('reddit_monitor_statuses');
+                if (saved) {
+                    try {
+                        setPostStatuses(JSON.parse(saved));
+                    } catch (e) {
+                        console.error('Failed to parse statuses', e);
+                    }
+                }
                 loadData();
             }, []);
+
+            function updateStatus(postId, newStatus) {
+                const newStatuses = {
+                    ...postStatuses,
+                    [postId]: newStatus
+                };
+                setPostStatuses(newStatuses);
+                localStorage.setItem('reddit_monitor_statuses', JSON.stringify(newStatuses));
+            }
 
             async function loadData() {
                 try {
@@ -336,7 +439,15 @@
             }
 
             const generatedDate = new Date(data.generated_at);
-            const topPost = data.top_opportunities[0];
+            
+            // Filter posts
+            const filteredPosts = data.top_opportunities.filter(post => {
+                if (filterStatus === 'All') return true;
+                const status = postStatuses[post.post_id] || 'Backlog';
+                return status === filterStatus;
+            });
+
+            const topPost = filteredPosts.length > 0 ? filteredPosts[0] : null;
 
             return (
                 <div className="container">
@@ -355,8 +466,8 @@
                             <div className="value">{data.top_opportunities.length}</div>
                         </div>
                         <div className="stat-card">
-                            <div className="label">Highest Score</div>
-                            <div className="value">{topPost.score}/100</div>
+                            <div className="label">Visible Posts</div>
+                            <div className="value">{filteredPosts.length}</div>
                         </div>
                         <div className="stat-card">
                             <div className="label">Subreddits</div>
@@ -364,11 +475,48 @@
                         </div>
                     </div>
 
-                    {data.top_opportunities.map(post => (
-                        <div key={post.post_id} className="post-card">
+                    <div className="filter-bar">
+                        <button 
+                            className={`filter-btn ${filterStatus === 'All' ? 'active' : ''}`}
+                            onClick={() => setFilterStatus('All')}
+                        >
+                            All ({data.top_opportunities.length})
+                        </button>
+                        {STATUS_OPTIONS.map(status => {
+                            const count = data.top_opportunities.filter(p => (postStatuses[p.post_id] || 'Backlog') === status).length;
+                            return (
+                                <button
+                                    key={status}
+                                    className={`filter-btn ${filterStatus === status ? 'active' : ''}`}
+                                    onClick={() => setFilterStatus(status)}
+                                >
+                                    {status} ({count})
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {filteredPosts.map(post => {
+                        const currentStatus = postStatuses[post.post_id] || 'Backlog';
+                        
+                        return (
+                        <div key={post.post_id} className="post-card" data-status={currentStatus}>
                             <div className="post-header">
-                                <span className="rank-badge">#{post.rank}</span>
-                                <span className="score-badge">{post.score}/100</span>
+                                <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+                                    <span className="rank-badge">#{post.rank}</span>
+                                    <span className="score-badge">{post.score}/100</span>
+                                </div>
+                                <select 
+                                    className="status-select"
+                                    value={currentStatus}
+                                    onChange={(e) => updateStatus(post.post_id, e.target.value)}
+                                    // Prevent expanding the card when clicking select
+                                    onClick={(e) => e.stopPropagation()} 
+                                >
+                                    {STATUS_OPTIONS.map(opt => (
+                                        <option key={opt} value={opt}>{opt}</option>
+                                    ))}
+                                </select>
                             </div>
 
                             <h2 className="post-title">{post.title}</h2>
